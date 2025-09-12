@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from langchain_core.prompts import PromptTemplate
 from langchain_ollama import OllamaLLM
 from langchain_core.output_parsers import StrOutputParser
+from utils.color_logger import log_info, log_success, log_process
 
 # .env 파일 로드
 load_dotenv()
@@ -20,7 +21,7 @@ Shadow of the Erdtree is a fully fledged expansion for Elden Ring
 """
 
 if __name__ == "__main__":
-    print("Hello, langchain!")
+    log_success("Hello, langchain!")
 
     summary_template = """
         다음 정보를 바탕으로 한국어로 답변해주세요:
@@ -41,13 +42,14 @@ if __name__ == "__main__":
 
     # temperature: ai가 얼마나 창의적일지 정하는 것
     # model: ai가 사용할 모델
-    print("::::::::: llama3 모델 사용 중...")
+    log_process("llama3 모델 사용 중...")
     llm = OllamaLLM(model="llama3")
-
 
     # 파이프 연산자를 통해 summary_prompt_template에 있는 내용을 llm에 전달
     chain = summary_prompt_template | llm | StrOutputParser()
 
     # chain.invoke를 체인 실행
+    log_process("AI 모델 실행 중...")
     res = chain.invoke(input={"information": information})
+    log_info("결과:")
     print(res)

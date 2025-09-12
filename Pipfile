@@ -10,6 +10,8 @@ langchainhub = "*"
 python-dotenv = "*"
 black = "*"
 load-dotenv = "*"
+langchain-tavily = "*"
+colorama = "*"
 
 [dev-packages]
 
