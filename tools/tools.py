@@ -4,7 +4,7 @@ import os
 
 load_dotenv()
 
-def get_profile_url_tavily(name: str):
+def get_profile_username_tavily(name: str):
     """Search for a person's profile URL using Tavily API"""
     api_key = os.getenv("TAVILY_API_KEY")
     
