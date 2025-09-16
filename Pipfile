@@ -12,6 +12,7 @@ black = "*"
 load-dotenv = "*"
 langchain-tavily = "*"
 colorama = "*"
+flask = "*"
 
 [dev-packages]
 

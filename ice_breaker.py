@@ -5,7 +5,7 @@ from langchain_core.prompts import PromptTemplate
 from third_parties.github import get_all_github_profile_data
 from utils.color_logger import log_info, log_success, log_warning, log_process
 from agents.github_lookup_agent import lookup_github_profile
-from output_parsers import summary_parser
+from output_parsers import summary_parser,Summary
 
 
 # API 키 확인
@@ -17,19 +17,21 @@ else:
     log_warning("API 키가 설정되지 않음")
 
 
-def ice_break_with(name: str) -> str:
+def ice_break_with(name: str) -> tuple[Summary,str]:
     github_username = lookup_github_profile(name=name)
     github_data = get_all_github_profile_data(username=github_username)
+    image_url = github_data["profile"]["image_url"]
 
     summary_template = """
-        다음 정보를 바탕으로 한국어로 답변해주세요:
+        다음 정보를 바탕으로 한국어로 답변해주세요: 
         
         정보: {information}
         
         다음 형식으로 작성해주세요:
-        1. 요약: 위 정보의 핵심 내용을 간단히 정리
-        2. 흥미로운 사실: 프로젝트에 관한 2가지 흥미로운 점이나 특징
-        3. 부족한점이나 개선점: 부족한점이나 개선점이 있으면 적어주세요 없으면 칭찬해줘요
+        1. name: 사용자의 이름 (GitHub 프로필에서 가져온 이름)
+        2. summary: 위 정보의 핵심 내용을 간단히 정리
+        3. interesting_facts: 프로젝트에 관한 2가지 흥미로운 점이나 특징 (리스트 형태)
+        4. areas_for_improvement: 부족한점이나 개선점이 있으면 적어주세요 없으면 칭찬해줘요 (문자열 형태)
         
         반드시 한국어로만 답변해주세요.
         \n{format_instructions}
@@ -55,9 +57,11 @@ def ice_break_with(name: str) -> str:
 
     # chain.invoke를 체인 실행
     log_process("AI 모델 실행 중...")
-    res = chain.invoke(input={"information": github_data})
+    res:Summary = chain.invoke(input={"information": github_data}) # 힌트 추가
     log_info("결과:")
     print(res)
+    print(image_url)
+    return res,image_url
 
 
 if __name__ == "__main__":

@@ -29,6 +29,7 @@ def get_all_github_profile_data(username):
             "login_id": user_data.get("login"),
             "name": user_data.get("name"),
             "avatar_url": user_data.get("avatar_url"),
+            "image_url": user_data.get("avatar_url"),  # image_url로도 접근 가능
             "bio": user_data.get("bio"),
             "followers": user_data.get("followers"),
             "following": user_data.get("following"),
